@@ -7,3 +7,7 @@ export const isCombinationUsed = (key: string) => {
 export const markCombinationUsed = (key: string) => {
     usedCombinations.add(key);
 }
+
+export const clearUsedCombinations = () => {
+    usedCombinations.clear();
+}
