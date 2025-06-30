@@ -9,6 +9,7 @@ import http from 'http';
 import cors from 'cors';
 import router from './routes/index';
 import { requestLogger } from './middlewares/request-logger.middleware';
+import { loadUsedCombinationsFromDB } from './stores/used-combination.store';
 
 const app = express();
 const server = http.createServer(app);
@@ -63,6 +64,7 @@ app.use(apiErrorHandler);
 (async () => {
   try {
     await connectDB();
+    await loadUsedCombinationsFromDB();
   } catch (error) {
     console.error('Error updating users:', error);
   }
