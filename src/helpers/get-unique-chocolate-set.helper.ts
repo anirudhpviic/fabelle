@@ -15,15 +15,20 @@ function* generateCombinations(arr: any, k: number, start = 0, combo = []): Iter
 }
 
 export async function getUniqueChocolateSet(userThemes: string[], k = 5) {
-    const themed = CHOCOLATES.filter((choc) =>
+    let themed = CHOCOLATES.filter((choc) =>
         choc.themes.some((theme) => userThemes.includes(theme))
     );
-    const nonThemed = CHOCOLATES.filter(
+    let nonThemed = CHOCOLATES.filter(
         (choc) => !choc.themes.some((theme) => userThemes.includes(theme))
     );
 
+    while (themed.length < k && nonThemed.length > 0) {
+        const choco = nonThemed.shift(); // removes first item
+        if (choco) themed.push(choco);
+    }
+
     if (themed.length < k) {
-        throw new Error(`Not enough chocolates matching themes(${themed.length} found, need ${k})`);
+        throw new Error(`Not enough total chocolates to create a combination of ${k}`);
     }
 
     // 1. Try all themed combinations first

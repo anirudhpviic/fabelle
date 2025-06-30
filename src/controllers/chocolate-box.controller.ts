@@ -6,7 +6,7 @@ export const createChocolateBox = async (req: Request, res: Response, next: Next
     try {
         const value = await createChocolateBoxValidator.validateAsync(req.body);
         const { mcqAnswers, inputs } = value;
-        const result = await createChocolateBoxService()
+        const result = await createChocolateBoxService(mcqAnswers, inputs);
         res.status(201).json({ data: result });
     } catch (error) {
         console.error('Error creating chocolate box:', error);
