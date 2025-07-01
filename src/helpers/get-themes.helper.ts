@@ -11,6 +11,5 @@ export const getThemesFromMcqAnswer = (mcqAnswers: string[]) => {
     });
 
     const sortedThemeIds = Object.entries(themeCounts).sort((a, b) => b[1] - a[1]).map(entry => entry[0]);
-    const sortedThemeNames = sortedThemeIds.map(themeId => THEMES.find(t => t.id === themeId)?.name).filter(Boolean);
-    return { sortedThemeIds, sortedThemeNames }
+    return sortedThemeIds.map(themeId => THEMES.find(t => t.id === themeId)?.name).filter(Boolean);
 }

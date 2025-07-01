@@ -1,4 +1,5 @@
 import { CHOCOLATES } from "../constants";
+import { NoUniqueCombinationLeftError } from "../errors/no-unique-combination-left.error";
 import { isCombinationUsed } from "./used-combination.helper";
 
 // Generator for all k-combinations in lex order
@@ -62,6 +63,6 @@ export async function getUniqueChocolateSet(userThemes: string[], k = 5) {
         }
     }
 
-    // if all complete logic
-    throw new Error("No unique chocolate combinations left");
+    // no more combination left
+    throw new NoUniqueCombinationLeftError();
 }

@@ -4,34 +4,32 @@ import { getUniqueChocolateSet } from "../helpers/get-unique-chocolate-set.helpe
 import { getThemesFromMcqAnswer } from "../helpers/get-themes.helper";
 import { isResetting, setResetting } from "../helpers/used-combination-reset-lock.helper";
 import { createDescriptionFromEmotionsAndThemes, createTitleFromEmotionsAndThemes, getEmotionsFromInputs } from "./open-ai.service";
+import { NoUniqueCombinationLeftError } from "../errors/no-unique-combination-left.error";
 
 export const createChocolateBoxService = async (mcqAnswers: string[], inputs: string[]) => {
-    const { sortedThemeIds, sortedThemeNames }: any = getThemesFromMcqAnswer(mcqAnswers);
+    const sortedThemeNames: any = getThemesFromMcqAnswer(mcqAnswers);
 
     while (true) {
         try {
-            // unique chocolates set
             const { uniqueSet, key } = await getUniqueChocolateSet(sortedThemeNames as string[]);
             await ChocolateSetSchema.create({ uniqueId: key });
             markCombinationUsed(key);
 
-            // emotions
             const emotions: any = await getEmotionsFromInputs(inputs);
             const parsedEmotions = JSON.parse(emotions.replace(/```json\s*|```/g, '').trim());
 
-            // title
-            const title = await createTitleFromEmotionsAndThemes(parsedEmotions, sortedThemeNames);
+            const [title, description] = await Promise.all([
+                createTitleFromEmotionsAndThemes(parsedEmotions, sortedThemeNames),
+                createDescriptionFromEmotionsAndThemes(parsedEmotions, sortedThemeNames)
+            ])
 
-            // description
-            const description = await createDescriptionFromEmotionsAndThemes(parsedEmotions, sortedThemeNames);
-
-            return { uniqueSet, themes: sortedThemeNames, emotions: parsedEmotions, title, description };
+            return { uniqueSet, themes: sortedThemeNames, title, description };
         } catch (error: any) {
             if (error.code === 11000) {
                 continue;
             }
 
-            if (error.message === 'No unique chocolate combinations left') {
+            if (error instanceof NoUniqueCombinationLeftError) {
                 if (isResetting) {
                     // Another request is already resetting, wait a bit and retry
                     await new Promise(resolve => setTimeout(resolve, 1000));
@@ -48,6 +46,7 @@ export const createChocolateBoxService = async (mcqAnswers: string[], inputs: st
                 }
                 continue;
             }
+            
             throw new Error(error.message);
         }
     }

@@ -1,10 +1,13 @@
 export const GET_EMOTIONS_SYSTEM_PROMPT = () => `
-You are an emotion detection AI. Your job is to understand what a person feels about their sibling based on a few short answers or phrases. Return 3–5 one-word emotions only — like love, pride, nostalgia, trust, joy, jealousy, admiration, protectiveness, annoyance, etc. Don't include any explanation, just a  array.
-Eg. ["joy", "pride", "nostalgia"] - array with strings
-`
+You are an emotion detection AI for Fabelle, a premium chocolate brand. Your job is to understand what a person feels about their sibling based on a few short answers or phrases. These emotions will be used to create a unique chocolate box set for Raksha Bandhan.
+
+Return only 3–5 one-word emotions that reflect the sibling bond — such as love, pride, nostalgia, trust, joy, jealousy, admiration, protectiveness, annoyance, etc. Do not include any explanation, just return a JSON array.
+
+Example output: ["joy", "pride", "nostalgia"]
+`;
 
 export const GET_EMOTIONS_USER_PROMPT = (inputs: string[]) => `
-What emotions are expressed in these lines:\n${inputs.join('\n')}
+What emotions are expressed in these lines: ${JSON.stringify(inputs)}
 `
 
 export const CREATE_TITLE_SYSTEM_PROMPT = () => `
@@ -32,7 +35,7 @@ Be unique.Never repeat exact phrases from the input.Prioritize creativity while 
 `
 
 export const CREATE_TITLE_USER_PROMPT = (emotions: string[], themes: string[]) => `
-Emotions: ${emotions.join(', ')} \nThemes: ${themes.join(', ')} \n\nGive a short title(1 - 2 words)
+Emotions: ${JSON.stringify(emotions)} \nThemes: ${JSON.stringify(themes)} \n\nGive a short title(1 - 2 words)
 `
 
 export const CREATE_DESCRIPTION_SYSTEM_PROMPT = () => `
@@ -48,12 +51,12 @@ Keep the tone emotional, elegant, and personal.
 
 Mention sibling relationship implicitly(without saying "sibling" or "brother/sister").
 
-Include no more than 2 sentences.
+Include no more than 1 sentences.
 
 Focus on evoking emotion and nostalgia using the listed emotions and themes.
 
-Emotions: ${emotions.join(', ')}
-Themes: ${themes.join(', ')}
+Emotions: ${JSON.stringify(emotions)}
+Themes: ${JSON.stringify(themes)}
 
 Now, write the description:
 `
