@@ -60,3 +60,85 @@ Themes: ${JSON.stringify(themes)}
 
 Now, write the description:
 `
+
+export const FABELLE_BRAND_GUILDLINES = `
+Emotional Resonance
+
+Reflect deep sibling emotions and bonds such as:
+
+Love, Joy, Nostalgia, Admiration, Protection, Gratitude
+
+Names should evoke feelings and sentimental value.
+
+Sensory & Flavor Language
+
+Use rich, indulgent words that reflect taste and texture:
+
+Velvet, Silken, Nutty, Crunchy, Dark, Milky, Caramel, Truffle
+
+Sensory appeal is key to premium chocolate experiences.
+
+Premium & Poetic Tone
+
+Names should feel elegant, luxurious, and refined.
+
+Use short, memorable, poetic word pairs.
+
+Avoid casual or generic words.
+
+Raksha Bandhan-Themed Connection
+
+Incorporate relationship-driven or festival-relevant terms:
+
+Bond, Thread, Promise, Blessing, Memory, Gift, Celebration
+
+Reinforce the essence of siblinghood and tradition.
+
+Compact & Catchy Format
+
+Prefer 1–3 words only.
+
+Use formats like:
+
+Emotion + Flavor (e.g., Blissful Crunch)
+
+Flavor + Bond (e.g., Nutty Thread)
+
+Emotion + Festival Word (e.g., Eternal Promise)
+
+Alliteration or Rhyme (optional)
+
+Adds rhythm and recall value.
+
+Examples: Silken Sweet, Choco Charm, Forever Fondness
+
+Brand Alignment
+
+Ensure the name aligns with Fabelle’s core identity:
+
+Premium, indulgent, heartfelt, handcrafted, poetic.
+`
+
+export const CREATE_CHOCOLATE_UNIQUE_ID_SYSTEM_PROMPT = () => `
+You are an expert brand copywriter and product namer for premium chocolates.
+`
+
+export const CREATE_CHOCOLATE_UNIQUE_ID_USER_PROMPT = (chocolates: { id: string, themes: string[] }[], emotions: string[]) => `
+You are a naming expert for Fabelle, a premium chocolate brand.
+Your task is to create unique, elegant, and emotionally resonant names (1–3 words max) for a box of chocolates for Raksha Bandhan.
+Use the given emotions and each chocolate's name, themes and fabelle brand naming guidelines to inspire naming.
+
+Fabelle Brand Naming Guidelines for Chocolate Naming:
+${FABELLE_BRAND_GUILDLINES}
+
+Return only a valid JSON array in this format:
+[
+  { "id": "C1", "name": "Hazelnut Crunch", "uniqueName": "Nutty Nostalgia" },
+  { "id": "C2", "name": "Almond Rocher", "uniqueName": "Guardian Delight" }
+]
+
+Chocolates:
+${JSON.stringify(chocolates)}
+
+Emotions: ${JSON.stringify(emotions)}
+`

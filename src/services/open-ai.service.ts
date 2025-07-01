@@ -1,5 +1,5 @@
 import OpenAI from 'openai';
-import { CREATE_DESCRIPTION_SYSTEM_PROMPT, CREATE_DESCRIPTION_USER_PROMPT, CREATE_TITLE_SYSTEM_PROMPT, CREATE_TITLE_USER_PROMPT, GET_EMOTIONS_SYSTEM_PROMPT, GET_EMOTIONS_USER_PROMPT } from '../prompts';
+import { CREATE_CHOCOLATE_UNIQUE_ID_SYSTEM_PROMPT, CREATE_CHOCOLATE_UNIQUE_ID_USER_PROMPT, CREATE_DESCRIPTION_SYSTEM_PROMPT, CREATE_DESCRIPTION_USER_PROMPT, CREATE_TITLE_SYSTEM_PROMPT, CREATE_TITLE_USER_PROMPT, GET_EMOTIONS_SYSTEM_PROMPT, GET_EMOTIONS_USER_PROMPT } from '../prompts';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -57,4 +57,20 @@ export const createDescriptionFromEmotionsAndThemes = async (emotions: string[],
     });
 
     return completion.choices[0].message.content?.trim() || '';
-} 
+}
+
+export const createChocolateUniqueIds = async (chocolates: { id: string, themes: string[] }[], emotions: string[]) => {
+    const systemPrompt = CREATE_CHOCOLATE_UNIQUE_ID_SYSTEM_PROMPT()
+    const userPrompt = CREATE_CHOCOLATE_UNIQUE_ID_USER_PROMPT(chocolates, emotions)
+
+    const completion = await openai.chat.completions.create({
+        model: 'gpt-4.1-mini',
+        messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.8,
+    });
+
+    return JSON.parse(completion.choices[0].message.content || '[]');
+}
