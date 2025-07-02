@@ -3,7 +3,7 @@ import { clearUsedCombinations, markCombinationUsed } from "../helpers/used-comb
 import { getUniqueChocolateSet } from "../helpers/get-unique-chocolate-set.helper";
 import { getThemesFromMcqAnswer } from "../helpers/get-themes.helper";
 import { isResetting, setResetting } from "../helpers/used-combination-reset-lock.helper";
-import { createChocolateUniqueIds, createDescriptionFromEmotionsAndThemes, createTitleFromEmotionsAndThemes, getEmotionsFromInputs } from "./open-ai.service";
+import { createChocolateUniqueNames, createDescriptionFromEmotionsAndThemes, createTitleFromEmotionsAndThemes, getEmotionsFromInputs } from "./open-ai.service";
 import { NoUniqueCombinationLeftError } from "../errors/no-unique-combination-left.error";
 import { CHOCOLATES } from "../constants";
 
@@ -16,15 +16,13 @@ export const createChocolateBoxService = async (mcqAnswers: string[], inputs: st
             await ChocolateSetSchema.create({ uniqueId: key });
             markCombinationUsed(key);
 
-            const emotions: any = await getEmotionsFromInputs(inputs);
-            const parsedEmotions = JSON.parse(emotions.replace(/```json\s*|```/g, '').trim());
-
             const uniqueSetWithEmotions = CHOCOLATES.filter((choc) => uniqueSet.includes(choc.id));
 
+            const emotions = await getEmotionsFromInputs(inputs);
             const [title, description, chocolates] = await Promise.all([
-                createTitleFromEmotionsAndThemes(parsedEmotions, sortedThemeNames),
-                createDescriptionFromEmotionsAndThemes(parsedEmotions, sortedThemeNames),
-                createChocolateUniqueIds(uniqueSetWithEmotions, parsedEmotions)
+                createTitleFromEmotionsAndThemes(emotions, sortedThemeNames),
+                createDescriptionFromEmotionsAndThemes(emotions, sortedThemeNames),
+                createChocolateUniqueNames(uniqueSetWithEmotions, emotions)
             ])
 
             return { chocolates, themes: sortedThemeNames, title, description };
