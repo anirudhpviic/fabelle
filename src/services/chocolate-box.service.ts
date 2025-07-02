@@ -44,6 +44,7 @@ export const createChocolateBoxService = async (mcqAnswers: string[], inputs: st
                     await ChocolateSetSchema.deleteMany({});
                     clearUsedCombinations();
                 } finally {
+                    console.log("Reset completed...")
                     setResetting(false);
                 }
                 continue;
