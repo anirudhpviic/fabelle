@@ -1,4 +1,4 @@
-import { ALL_OPTIONS_WITH_THEMES, THEMES } from "../constants";
+import { ALL_OPTIONS_WITH_THEMES, THEMES } from "../constants/constants";
 
 export const getThemesFromMcqAnswer = (mcqAnswers: string[]) => {
     const themeCounts: { [key: string]: number } = {}; mcqAnswers.forEach(selectedText => {

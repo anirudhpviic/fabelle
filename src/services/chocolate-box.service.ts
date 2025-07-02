@@ -5,7 +5,7 @@ import { getThemesFromMcqAnswer } from "../helpers/get-themes.helper";
 import { isResetting, setResetting } from "../helpers/used-combination-reset-lock.helper";
 import { createChocolateUniqueNames, createDescriptionFromEmotionsAndThemes, createTitleFromEmotionsAndThemes, getEmotionsFromInputs } from "./open-ai.service";
 import { NoUniqueCombinationLeftError } from "../errors/no-unique-combination-left.error";
-import { CHOCOLATES } from "../constants";
+import { CHOCOLATES } from "../constants/constants"
 
 export const createChocolateBoxService = async (mcqAnswers: string[], inputs: string[]) => {
     const sortedThemeNames: any = getThemesFromMcqAnswer(mcqAnswers);

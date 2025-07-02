@@ -1,4 +1,4 @@
-import { CHOCOLATES } from "../constants";
+import { CHOCOLATES } from "../constants/constants";
 import { NoUniqueCombinationLeftError } from "../errors/no-unique-combination-left.error";
 import { isCombinationUsed } from "./used-combination.helper";
 
